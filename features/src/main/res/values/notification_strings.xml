@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification channel -->
+    <string name="notification_channel_id" translatable="false">integration_hms_channel_id</string>
+    <string name="notification_channel_name">Important notification channel</string>
+    <string name="notification_channel_description">Shows the most important information</string>
+</resources>

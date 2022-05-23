@@ -1,0 +1,136 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlinx-serialization'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdk target_sdk_version
+
+    defaultConfig {
+        applicationId "ru.mobileup.integrationhms"
+        minSdk min_sdk_version
+        targetSdk target_sdk_version
+        versionCode 1
+        versionName "0.0.1"
+
+        buildConfigField "String", "BACKEND_URL", '"https://api.unsplash.com/"'
+    }
+
+    signingConfigs {
+        debug {
+            // MD5:    85:23:7C:20:CD:03:DE:EA:CF:DD:4D:2A:7D:91:11:76
+            // SHA1:   95:01:AE:ED:C1:C7:C2:09:C2:BB:C9:83:61:B1:0D:18:10:AD:E8:1F
+            // SHA256: BE:3F:CD:94:8B:66:98:D6:BA:2E:CA:C2:22:04:4E:57:DD:88:C3:2A:EC:70:E2:98:A5:7C:20:16:6B:5C:44:AE
+            storeFile file("../keystore/mobileup-debug.jks")
+            storePassword "9DR5AW"
+            keyAlias "integration-mobile-services-debug"
+            keyPassword "9DR5AW"
+        }
+        release {
+            // MD5:    F9:CE:77:1D:34:FB:0F:F1:C2:E0:85:C9:BA:88:96:F9
+            // SHA1:   AE:F6:E4:20:4F:F2:26:AF:BE:7B:A8:CA:98:D2:73:2D:6E:56:0C:71
+            // SHA256: 89:59:9E:F2:43:CE:19:F2:E3:92:BC:A1:E8:E0:64:30:CD:FF:1C:AA:57:A5:48:E0:19:D2:2E:59:EC:6B:2C:47
+            storeFile file("../keystore/mobileup-release.jks")
+            storePassword "a3FrRGgq"
+            keyAlias "integration-mobile-services-release"
+            keyPassword "a3FrRGgq"
+        }
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-debug"
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "platform"
+    productFlavors {
+
+        universal {
+            dimension "platform"
+            apply plugin: 'com.huawei.agconnect'
+        }
+
+        gms {
+            dimension "platform"
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+}
+
+dependencies {
+    // Modules
+    implementation project(':core')
+    implementation project(':features')
+
+    coreLibraryDesugaring libs.android.desugar
+
+    // Kotlin
+    implementation libs.kotlin.datetime
+    implementation libs.coroutines.android
+
+    // UI
+    implementation libs.compose.ui
+    implementation libs.compose.material
+    implementation libs.activity.compose
+    debugImplementation libs.compose.tooling
+
+    // Architecture
+    implementation libs.bundles.sesame
+    implementation libs.bundles.decompose
+    debugImplementation libs.replica.devtools.debug
+    releaseImplementation libs.replica.devtools.release
+
+    // DI
+    implementation libs.koin.android
+
+    // Network
+    implementation libs.retrofit.core
+
+    // Serialization
+    implementation libs.serialization.json
+
+    // Debugging
+    implementation libs.timber
+
+    // Testing
+    testImplementation libs.junit
+    testImplementation libs.extJunit
+    testImplementation libs.bundles.koin.test
+    testImplementation libs.mockWebServer
+    testImplementation libs.awaitility
+    testImplementation libs.robolectric
+}

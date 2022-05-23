@@ -1,0 +1,5 @@
+<resources>
+    <!-- List -->
+    <string name="photos_empty_description">Photos are not found</string>
+    <string name="photos_search_placeholder">Search</string>
+</resources>
