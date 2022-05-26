@@ -1,4 +1,4 @@
-# connect_notification_android
+# Push Notifications Android
 This repository shows how to use Huawei or Google services for Push-notification in different flavors.
 # Preparations
 You need to create accounts in Huawei and Google, enable services in developer console and get config files and keys.
